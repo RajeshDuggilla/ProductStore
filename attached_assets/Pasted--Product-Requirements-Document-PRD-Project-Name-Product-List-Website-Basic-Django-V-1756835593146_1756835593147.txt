@@ -1,0 +1,98 @@
+## **Product Requirements Document (PRD)**
+
+**Project Name:** Product List Website (Basic Django Version)
+**Owner:** Rajesh
+**Version:** 1.0
+**Date:** 2 Sept 2025
+
+---
+
+### **1. Objective**
+
+Create a simple Django-based website to list products, view product details, and serve as a foundation for future features like a cart and checkout.
+
+---
+
+### **2. Goals**
+
+* Display a list of products with images, name, price, and description.
+* Show a detailed view for each product.
+* Make it easy to add/edit products via Django admin.
+* Prepare the site so it can run on **local machine** and **cloud platforms like Replit**.
+
+---
+
+### **3. Features**
+
+#### **3.1 Product List Page**
+
+* Shows all available products.
+* Displays product image, name, short description, and price.
+* Links to the product detail page.
+
+#### **3.2 Product Detail Page**
+
+* Displays:
+
+  * Product name
+  * Image
+  * Full description
+  * Price
+* “Back to Products” link.
+
+#### **3.3 Home Page**
+
+* Simple welcome message.
+* Link to “View All Products”.
+
+#### **3.4 Admin Panel**
+
+* Add, edit, delete products.
+* Fields:
+
+  * Name
+  * Slug (auto-generated from name)
+  * Description
+  * Price
+  * Image (optional)
+
+---
+
+### **4. Technical Requirements**
+
+* **Backend:** Python 3.x, Django 5.x
+* **Frontend:** HTML, CSS (Bootstrap optional)
+* **Database:** SQLite (default for simplicity)
+* **Static Files:** Served locally; future-ready for cloud deployment.
+* **Hosting:** Local, Replit-ready configuration.
+
+---
+
+### **5. Data Model**
+
+**Model: Product**
+
+| Field       | Type         | Description                    |
+| ----------- | ------------ | ------------------------------ |
+| name        | CharField    | Product name                   |
+| slug        | SlugField    | URL-friendly unique identifier |
+| description | TextField    | Product details                |
+| price       | DecimalField | Price in INR                   |
+| image       | ImageField   | Product image                  |
+
+---
+
+### **6. Fake Data**
+
+* 10 fake products preloaded via fixtures or CSV import.
+
+---
+
+### **7. Future Scope**
+
+* Add cart & checkout.
+* User authentication.
+* Search & filter products.
+* Payment gateway integration.
+
+
