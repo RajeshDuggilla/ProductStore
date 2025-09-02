@@ -60,8 +60,16 @@
                         <strong>Total:</strong>
                         <strong>₹{{ total|floatformat:2 }}</strong>
                     </div>
-                    <div class="d-grid">
-                        <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg">Proceed to Checkout</a>
+                    <div class="d-grid gap-2">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'accounts:checkout_authenticated' %}" class="btn btn-primary btn-lg">Proceed to Checkout</a>
+                        {% else %}
+                            <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg">Checkout as Guest</a>
+                            <div class="text-center">
+                                <small class="text-muted">or</small>
+                            </div>
+                            <a href="{% url 'accounts:login' %}?next={% url 'accounts:checkout_authenticated' %}" class="btn btn-outline-primary">Login to Checkout</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

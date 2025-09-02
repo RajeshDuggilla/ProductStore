@@ -1,0 +1,137 @@
+{% extends 'products/base.html' %}
+
+{% block title %}{{ title }} - Product Store{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Order Details</h2>
+    <a href="{% url 'accounts:orders' %}" class="btn btn-outline-secondary">← Back to Orders</a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Order #{{ order.order_id }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Order Information</h6>
+                        <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y H:i" }}</p>
+                        <p><strong>Status:</strong> 
+                            <span class="badge {% if order.status == 'delivered' %}bg-success{% elif order.status == 'shipped' %}bg-info{% elif order.status == 'processing' %}bg-warning{% elif order.status == 'cancelled' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </p>
+                        <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Shipping Information</h6>
+                        <p><strong>Name:</strong> {{ order.shipping_name }}</p>
+                        <p><strong>Email:</strong> {{ order.shipping_email }}</p>
+                        <p><strong>Phone:</strong> {{ order.shipping_phone }}</p>
+                        <p><strong>Address:</strong><br>{{ order.shipping_address|linebreaks }}</p>
+                    </div>
+                </div>
+                
+                <h6>Order Items</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'product_detail' item.product.slug %}" class="text-decoration-none">
+                                        {{ item.product.name }}
+                                    </a>
+                                </td>
+                                <td>₹{{ item.price }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>₹{{ item.get_total }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total:</th>
+                                <th>₹{{ order.total_amount }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Order Status</h6>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="timeline-item {% if order.status == 'pending' or order.status == 'processing' or order.status == 'shipped' or order.status == 'delivered' %}completed{% endif %}">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Order Placed</span>
+                    </div>
+                    <div class="timeline-item {% if order.status == 'processing' or order.status == 'shipped' or order.status == 'delivered' %}completed{% endif %}">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Processing</span>
+                    </div>
+                    <div class="timeline-item {% if order.status == 'shipped' or order.status == 'delivered' %}completed{% endif %}">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Shipped</span>
+                    </div>
+                    <div class="timeline-item {% if order.status == 'delivered' %}completed{% endif %}">
+                        <span class="timeline-marker"></span>
+                        <span class="timeline-content">Delivered</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 20px;
+}
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+    border-left: 2px solid #e0e0e0;
+}
+.timeline-item.completed {
+    border-left-color: #28a745;
+}
+.timeline-item.completed .timeline-marker {
+    background-color: #28a745;
+}
+.timeline-marker {
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+}
+.timeline-content {
+    margin-left: 20px;
+    font-size: 14px;
+}
+.timeline-item.completed .timeline-content {
+    font-weight: bold;
+    color: #28a745;
+}
+</style>
+{% endblock %}
