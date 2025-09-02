@@ -1,0 +1,42 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Home - Product Store{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded mb-4">
+    <div class="text-center">
+        <h1 class="display-4">Welcome to Product Store</h1>
+        <p class="lead">Discover amazing products at great prices!</p>
+        <hr class="my-4">
+        <p>Browse our collection of products and find exactly what you need.</p>
+        <a class="btn btn-primary btn-lg" href="{% url 'product_list' %}" role="button">View All Products</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Quality Products</h5>
+                <p class="card-text">We offer only the best quality products for our customers.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Great Prices</h5>
+                <p class="card-text">Competitive prices and amazing deals on all products.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Fast Delivery</h5>
+                <p class="card-text">Quick and reliable delivery to your doorstep.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
