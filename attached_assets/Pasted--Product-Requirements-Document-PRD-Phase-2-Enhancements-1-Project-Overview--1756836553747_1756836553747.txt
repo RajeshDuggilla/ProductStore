@@ -1,0 +1,46 @@
+
+## **Product Requirements Document (PRD) – Phase 2 Enhancements**
+
+### **1. Project Overview**
+
+The current Django website displays a product list with details and supports basic admin management.
+This phase focuses on improving **user experience**, **functionality**, and **scalability**.
+
+---
+
+### **2. New Features**
+
+| Feature                           | Description                                                                                  | Benefit                                     | Complexity |
+| --------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------- |
+| **Product Search**                | Add a search bar to filter products by name or description.                                  | Improves discoverability of products.       | Easy       |
+| **Category Filter**               | Add categories (e.g., Electronics, Clothing) with filter options on the product list page.   | Helps users find relevant products quickly. | Medium     |
+| **Pagination**                    | Display a fixed number of products per page (e.g., 8) with page navigation.                  | Better performance and user experience.     | Easy       |
+| **Product Image Upload**          | Allow uploading images via Django Admin and display them on the product list & details page. | Visual appeal, better user trust.           | Medium     |
+| **Shopping Cart (Session-based)** | Store products in a session cart with quantity adjustments.                                  | Enables future checkout process.            | Medium     |
+| **Checkout Page**                 | Basic checkout form (Name, Email, Address, Phone).                                           | Simulates purchase process.                 | Medium     |
+| **User Authentication**           | Allow users to sign up, log in, and save their carts.                                        | Personalization and retention.              | Hard       |
+| **Admin Product Bulk Upload**     | Upload CSV of products in admin to auto-create multiple products.                            | Saves admin time.                           | Medium     |
+| **REST API Endpoints**            | Expose `/api/products` for external apps (e.g., mobile, React).                              | Extends usability.                          | Hard       |
+| **Responsive Design**             | Use Bootstrap or Tailwind for mobile-friendly layout.                                        | Better usability across devices.            | Easy       |
+
+---
+
+### **3. Technical Requirements**
+
+* **Backend:** Django 5.x, SQLite (can be upgraded to PostgreSQL in future)
+* **Frontend:** HTML, CSS, Bootstrap 5 (optional)
+* **Storage:** Local media folder for product images (AWS S3 in future)
+* **Authentication:** Django’s built-in `auth` system
+* **API:** Django REST Framework (DRF) for JSON responses
+* **Deployment Ready:** Compatible with Replit, Vercel, or Railway
+
+---
+
+### **4. Success Criteria**
+
+* Pages load in <2 seconds
+* Search returns relevant results instantly
+* Cart functionality works without login (session-based)
+* Mobile responsive design passes Chrome DevTools mobile view tests
+
+

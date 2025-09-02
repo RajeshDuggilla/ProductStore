@@ -3,15 +3,54 @@
 {% block title %}Products - Product Store{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>All Products</h2>
-    <a href="{% url 'home' %}" class="btn btn-outline-secondary">← Back to Home</a>
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>All Products</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">← Back to Home</a>
+    </div>
 </div>
 
-{% if products %}
+<!-- Search and Filter Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="search" placeholder="Search products..." value="{{ search_query }}">
+                    </div>
+                    <div class="col-md-2">
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category.slug }}" {% if selected_category.slug == category.slug %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control" name="min_price" placeholder="Min Price" value="{{ min_price }}">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control" name="max_price" placeholder="Max Price" value="{{ max_price }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Products Grid -->
+{% if page_obj %}
     <div class="row">
-        {% for product in products %}
-        <div class="col-md-4 mb-4">
+        {% for product in page_obj %}
+        <div class="col-md-3 mb-4">
             <div class="card h-100">
                 {% if product.image %}
                     <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
@@ -21,21 +60,59 @@
                     </div>
                 {% endif %}
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text flex-grow-1">{{ product.description|truncatewords:20 }}</p>
+                    <h6 class="card-title">{{ product.name }}</h6>
+                    {% if product.category %}
+                        <small class="text-muted">{{ product.category.name }}</small>
+                    {% endif %}
+                    <p class="card-text">{{ product.description|truncatewords:10 }}</p>
                     <div class="mt-auto">
                         <p class="card-text"><strong class="text-success">₹{{ product.price }}</strong></p>
-                        <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary">View Details</a>
+                        <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary btn-sm">View Details</a>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Product pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if min_price %}&min_price={{ min_price }}{% endif %}{% if max_price %}&max_price={{ max_price }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if min_price %}&min_price={{ min_price }}{% endif %}{% if max_price %}&max_price={{ max_price }}{% endif %}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if min_price %}&min_price={{ min_price }}{% endif %}{% if max_price %}&max_price={{ max_price }}{% endif %}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 {% else %}
     <div class="text-center">
-        <p class="lead">No products available yet.</p>
-        <a href="/admin/" class="btn btn-primary">Add Products via Admin</a>
+        <p class="lead">No products found.</p>
+        {% if search_query or selected_category %}
+            <a href="{% url 'product_list' %}" class="btn btn-primary">View All Products</a>
+        {% else %}
+            <a href="/admin/" class="btn btn-primary">Add Products via Admin</a>
+        {% endif %}
     </div>
 {% endif %}
 {% endblock %}
